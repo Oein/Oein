@@ -17,6 +17,7 @@
       + [Example](#ezinfscroll-example)
   * [Material Icons](#material-icons)
   * [styles2css(css.oein.kr)](https://css.oein.kr/)
+  * [Electron ipcRenderer](#ipcrenderer)
  
  
 
@@ -290,4 +291,16 @@ export default function Example() {
     </>
   );
 }
+```
+
+# ipcRenderer
+```ts
+import { contextBridge, ipcRenderer } from "electron";
+
+contextBridge.exposeInMainWorld("ipcRenderer", {
+  invoke: (chanel: string, ...datas: any) =>
+    ipcRenderer.invoke(chanel, ...datas),
+  once: (chanel: string, listener: any) => ipcRenderer.once(chanel, listener),
+  on: (chanel: string, listener: any) => ipcRenderer.on(chanel, listener),
+});
 ```
