@@ -297,7 +297,7 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-export const API_BASE = 'https://minjooncn.ert.im';
+export const API_BASE = '';
 
 interface Response<T = any> {
 	data: T;
