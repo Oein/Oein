@@ -294,12 +294,13 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
 
 # Oxios
 ```ts
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-export const API_BASE = '';
+export const API_BASE = 'https://minjooncn.ert.im';
 
-interface Response {
-	data: any;
+interface Response<T = any> {
+	data: T;
 	status: number;
 	headers?: Headers;
 }
@@ -387,16 +388,16 @@ class Requester {
 		}
 	}
 
-	async post(endpoint: string): Promise<Response>;
-	async post(
+	async post<T>(endpoint: string): Promise<Response<T>>;
+	async post<T>(
 		endpoint: string,
 		postReq: Omit<Omit<RequestOptions, 'method'>, 'endpoint'>
-	): Promise<Response>;
-	async post(postReq: Omit<RequestOptions, 'method'>): Promise<Response>;
-	async post(
+	): Promise<Response<T>>;
+	async post<T>(postReq: Omit<RequestOptions, 'method'>): Promise<Response<T>>;
+	async post<T>(
 		postReq: Omit<RequestOptions, 'method'> | string,
 		postReqOpt?: Omit<Omit<RequestOptions, 'method'>, 'endpoint'>
-	) {
+	): Promise<Response<T>> {
 		let req: RequestOptions;
 
 		if (typeof postReq == 'string')
@@ -413,16 +414,16 @@ class Requester {
 		return await this.request(req);
 	}
 
-	async get(endpoint: string): Promise<Response>;
-	async get(
+	async get<T>(endpoint: string): Promise<Response<T>>;
+	async get<T>(
 		endpoint: string,
 		postReq: Omit<Omit<RequestOptions, 'method'>, 'endpoint'>
-	): Promise<Response>;
-	async get(postReq: Omit<RequestOptions, 'method'>): Promise<Response>;
-	async get(
+	): Promise<Response<T>>;
+	async get<T>(postReq: Omit<RequestOptions, 'method'>): Promise<Response<T>>;
+	async get<T>(
 		postReq: Omit<RequestOptions, 'method'> | string,
 		postReqOpt?: Omit<Omit<RequestOptions, 'method'>, 'endpoint'>
-	) {
+	): Promise<Response<T>> {
 		let req: RequestOptions;
 
 		if (typeof postReq == 'string')
@@ -440,9 +441,9 @@ class Requester {
 	}
 }
 
-type RequesterInstance = ((req: RequestOptions) => Promise<Response>) &
-	((endpoint: string) => Promise<Response>) &
-	((endpoint: string, req: Omit<RequestOptions, 'endpoint'>) => Promise<Response>) &
+type RequesterInstance = (<T>(req: RequestOptions) => Promise<Response<T>>) &
+	(<T>(endpoint: string) => Promise<Response<T>>) &
+	(<T>(endpoint: string, req: Omit<RequestOptions, 'endpoint'>) => Promise<Response<T>>) &
 	Requester;
 
 const createInstance = (): RequesterInstance => {
